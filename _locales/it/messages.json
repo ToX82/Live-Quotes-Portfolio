@@ -1,0 +1,85 @@
+{
+    "theTitle": {
+        "message": "Live quotes portfolio"
+    },
+
+    "options": {
+        "message": "Opzioni"
+    },
+    "undoOptions": {
+        "message": "Annulla"
+    },
+
+    "marketOpens": {
+        "message": "Il mercato &egrave; aperto dalle"
+    },
+    "marketCloses": {
+        "message": "alle"
+    },
+    "marketHours": {
+        "message": "(0-24)"
+    },
+    "updateEvery": {
+        "message": "Aggiorna ogni"
+    },
+    "seconds": {
+        "message": "secondi"
+    },
+
+    "addStock": {
+        "message": "Aggiungi elemento"
+    },
+    "undoAddStock": {
+        "message": "Annulla"
+    },
+
+    "searchString": {
+        "message": "Simbolo (cercalo su Google Finance, es BIT:RACE)"
+    },
+    "symbolSearching": {
+        "message": "Sto cercando il simbolo inserito..."
+    },
+    "symbolNotFound": {
+        "message": "Il simbolo inserito non è valido"
+    },
+
+    "stockName": {
+        "message": "Nome"
+    },
+    "stockValue": {
+        "message": "Val."
+    },
+    "stockVar": {
+        "message": "+/-"
+    },
+    "stockVarPerc": {
+        "message": "+/-&nbsp;%"
+    },
+    "stockTarget": {
+        "message": "Target"
+    },
+    "stockStoploss": {
+        "message": "StopLoss"
+    },
+    "stockQ": {
+        "message": "Qta"
+    },
+    "StockPrice": {
+        "message": "Prezzo"
+    },
+    "StockInvestment": {
+        "message": "Investito"
+    },
+    "stockCurrent": {
+        "message": "Valore"
+    },
+    "stockRoi": {
+        "message": "ROI"
+    },
+    "stockRoiPerc": {
+        "message": "ROI&nbsp;%"
+    },
+    "stocksTotal": {
+        "message": "Totale"
+    }
+}

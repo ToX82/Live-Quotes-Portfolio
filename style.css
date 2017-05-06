@@ -73,7 +73,7 @@ table tr:hover {
 }
 */
 
-tbody td.close:hover {
+tbody tr:hover {
 	background-color: #D0E2EA;
 	border: 1px solid #E3E3E3;
 }
@@ -147,7 +147,7 @@ thead span {
 }
 
 #symbols {
-    width: 250px;
+    width: 320px;
 }
 
 /*sort stuff*/

@@ -1,31 +1,21 @@
 {
-  
-  "manifest_version":2,
-
-  "name":"Live Quotes Portfolio",
-
-  "description":"Live Quotes with a Nice Portfolio View & Target & stoploss Notifications",
-  
-  "version":"4.1",
-  
-  "icons":{
-      "128": "icons/icon128_1.png"
-    },
-
-  "browser_action": {
-    "default_title": "Live Quotes Portfolio",
-    "default_popup":"index.html"
-  },
-  
-  "background":{
-    "page":"background.html",
-    "persistent":true
-  },
-  
-  "permissions":[
-    "storage",
-    "https://www.google.com/*",
-    "notifications"
-  ]
-
+   "background": {
+      "page": "background.html",
+      "persistent": true
+   },
+   "options_page": "options.html",
+   "browser_action": {
+      "default_popup": "index.html",
+      "default_title": "Live Quotes Portfolio"
+   },
+   "description": "Live Quotes with a Nice Portfolio View & Target & stoploss Notifications",
+   "icons": {
+      "128": "icons/icon128_off.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhqIr2/YNuCLyUT9Af0dvbtAU10qE1SfLXSmg8DnCiGOc0lvJzRY7X5uZOndx6Niil9IQFrfOn/KbVWzxICxaFZpVJARU4QcK3pzbJgnbtbMJOyNovY4MxMWyt7C0L7IzMorW4cQ3OC6U4cMMBxiBiqYwIdJWqfVLacXpIYZH4I1JJuVFQ29pap+TtGdBFxoPuuuZLlPpZnV8i8xqskK6/i/dgSdI+7lIzASiQM+5ZZK6NBEuKk6tRe2YBQT1D7pAif5G7f2W5MgfyzD1400SnLrJNsFV+f5BTlMhFE9enLpB+tdzn9YLAkqDHXcRDQ1tP57nW/nfv0qXd66I7NesawIDAQAB",
+   "manifest_version": 2,
+   "name": "Live Quotes Portfolio",
+   "permissions": [ "storage", "https://www.google.com/*", "notifications" ],
+   "version": "5.0",
+   "default_locale": "en"
 }

@@ -1,4 +1,4 @@
-var bg  = chrome.extension.getBackgroundPage() 
+var bg  = chrome.extension.getBackgroundPage()
 //initialising app and attaching stuff
 angular.module("liveQuotesPortfolio", [])
     .filter("sortBy", sortBy)
@@ -11,7 +11,7 @@ function bodyCtrl($scope, $window) {
 
     $scope.list     = bg.stockData
     $scope.symbol   = ""    //symbol in the input box
-    
+
     $scope.cost     = localStorage.cost     ? JSON.parse(localStorage.cost)     : {}
     $scope.target   = localStorage.target   ? JSON.parse(localStorage.target)   : {}
     $scope.stoploss = localStorage.stoploss ? JSON.parse(localStorage.stoploss) : {}
@@ -23,7 +23,7 @@ function bodyCtrl($scope, $window) {
 
     $scope.$watch("from", function(newVal, oldVal) { localStorage.from = newVal })
     $scope.$watch("to", function(newVal, oldVal) { localStorage.to = newVal })
-    $scope.$watch("interval", function(newVal, oldVal) { localStorage.interval = newVal ? newVal : 5 })
+    $scope.$watch("interval", function(newVal, oldVal) { localStorage.interval = newVal ? newVal : 10 })
 
     //watches for updating bg page Variables instantly
     //using watch with 3rd parameter as true for deep checking of object
@@ -39,7 +39,7 @@ function bodyCtrl($scope, $window) {
     $scope.tValue       = tValue
     $scope.tROI         = tROI
     $scope.tPercentROI  = tPercentROI
-    
+
     $scope.addSymbol    = addSymbol
     $scope.delRow       = delRow
 
@@ -53,7 +53,7 @@ function bodyCtrl($scope, $window) {
     function redOrGreen(ele) {
         if ($scope.target[ele.id] && (deComma(ele.l) > deComma($scope.target[ele.id]))) {
             return "tGreen"
-        } 
+        }
         else if ($scope.stoploss[ele.id] && (deComma(ele.l) < deComma($scope.stoploss[ele.id]))) {
             return "sRed"
         } else {
@@ -109,17 +109,28 @@ function bodyCtrl($scope, $window) {
     function tPercentROI() {
         var total = 0
         total = $scope.tROI() * 100 / $scope.tInvestment()
-        return total ? total : null
+        return total ? total: null
     }
 
     function addSymbol($event) {
+        var howMany = $('tbody tr').length;
         if ($event.keyCode !== 13) { return }
         var syms = $scope.symbol.toUpperCase().replace(/ /g, "").split(",")
         //emptying the input box
         $scope.symbol = ""
         syms = syms.filter(function (el, i) { return el.trim() !== "" && syms.indexOf(el) === i })
         bg.inputSyms = bg.inputSyms.concat(syms)
-        chrome.extension.sendRequest({action: "getData", interval: 5})
+        chrome.extension.sendRequest({action: "getData", interval: 5});
+
+        $("#symbols").attr('placeholder', chrome.i18n.getMessage("symbolSearching"));
+        setTimeout(function() {
+            var howManyNew = $('tbody tr').length;
+            if (howManyNew === howMany) {
+                $("#symbols").attr('placeholder', chrome.i18n.getMessage("symbolNotFound"));
+            } else {
+                $("a[data-message='undoAddStock']").click();
+            }
+        }, 500);
     }
 
     function delRow(ele) {
@@ -138,7 +149,7 @@ function bodyCtrl($scope, $window) {
         $scope.list.forEach(function (el, i) { bg.symbols[el.id] = el.e + ":" + el.t })
         saveLocal()
     }
-    
+
     function saveLocal() {
         //saving prefs in localStorage
         if ($scope.list.length === 0) {
@@ -162,19 +173,19 @@ function bodyCtrl($scope, $window) {
 
 function sortBy() {
     return sortFunc
-    // arr would be the $scope.list 
+    // arr would be the $scope.list
     function sortFunc (arr, sortKey, reverse, scope) {
         // Making a copy of the Original Array to avoid an Infinite loop ($digest() has been
         // triggered 10 times.Aborting! Error). Because Otherwise the sort function will alter
-        // the Orignial Object ($scope.list = arr) (and then returns its sorted copy) which would cause  
+        // the Orignial Object ($scope.list = arr) (and then returns its sorted copy) which would cause
         // the trigger of $watches and $digest infinitely.
         var min     = Number.MIN_SAFE_INTEGER
         var arrCopy = arr.slice(0)
             // for symbol
-        if (sortKey === "t") { 
+        if (sortKey === "t") {
             var sorted = arrCopy.sort(function (a,b) { return a[sortKey] > b[sortKey] })
         }    // for price, change and change percentage
-        else if ("lccp".search(sortKey) > -1) { 
+        else if ("lccp".search(sortKey) > -1) {
             var sorted = arrCopy.sort(function (a,b) { return deComma(a[sortKey]) - deComma(b[sortKey]) })
         }     // for target, stoploss, cost & shares
         else if ("targetstoplosscostshares".search(sortKey) > -1) { //
@@ -199,11 +210,11 @@ function colorUp() {
   function linkFunc (scope, element, attributes) {
     //adding an event handler to see elements' value changes
     element.on("DOMSubtreeModified", onValChange)
-    
+
     function onValChange () {
       var eleVal = deComma(element.text())
       var color  = (eleVal > 0) ? " green": (eleVal < 0) ? " red": ""
-      element.attr("class", "ng-binding" + color)
+      element.closest("td").attr("class", "ng-binding" + color)
     }
   }
 }
@@ -219,13 +230,13 @@ function contentEditable() {
 
       //for Keypress event for enter key only
       element.on("keypress", function (key) {
-        if (key.keyCode === 13) { 
+        if (key.keyCode === 13) {
           key.preventDefault()
           element[0].blur()
         }
       })
       //triggering update of the ViewModel
-      element.on("change blur", function () { 
+      element.on("change blur", function () {
          scope.$apply(updateViewModel)
       })
 
@@ -252,14 +263,14 @@ chrome.extension.sendRequest({action: "getData", interval: parseInt(localStorage
 
 chrome.extension.onRequest.addListener(function (request) {
   var scope = angular.element($('[ng-app]')).scope()    //thats how we can refer App Scope outside the App Scope or Controller
-  
+
   if (request.action === "updateView") {
-      
+
       scope.$apply(function () { scope.list = bg.stockData })
       scope.list.forEach(function (el, i) { bg.symbols[el.id] = el.e + ":" + el.t })
 
   } else if (request.action === "updateTS") {
-      
+
       scope.$apply(function () {
          scope.target   = bg.target
          scope.stoploss = bg.stoploss
@@ -272,32 +283,28 @@ function print() { console.log.apply(console, arguments) }
 function deComma(text) { return (text ? Number((text+"").replace(/,/g, "")) : "") }
 
 //something are done without angular and with normal jQuery and Javascript
-$("#input a:eq(0)").click(addToggle)
-$("#input a:eq(1)").click(optionsToggle)
+$("a[data-message='addStock']").click(function() {
+    $("#symbols").removeAttr("style");
+    $("a[data-message='undoAddStock']").show();
+    $("a[data-message='options']").hide();
+    $(this).hide();
+});
+$("a[data-message='undoAddStock']").click(function() {
+    $("#symbols").css("display", "none");
+    $("a[data-message='addStock']").show();
+    $("a[data-message='options']").show();
+    $(this).hide();
+});
 
-function addToggle() {
-    if ($(this).text() === "Add!") {
-        $("#symbols").removeAttr("style")
-        $("#buttons a:eq(1)").css("display","none")        //hiding options button
-        $(this).text("Hide!")
-    } else if ($(this).text() === "Hide!") {
-        $("#symbols").css("display", "none")
-        $("#buttons a:eq(1)").removeAttr("style")        //displaying options button
-        $(this).text("Add!")
-    }
-}
-
-function optionsToggle() {
-    if ($(this).text() === "Options") {
-        $("#boxes div").removeAttr("style")
-        $("#buttons a:eq(0)").css("display","none")        //hiding add button
-        $("#buttons a:eq(2)").css("display","none")        //hiding contribute button
-        $(this).text("Hide!")
-    } else if ($(this).text() === "Hide!") {
-        $("#boxes div").css("display", "none")
-        $("#buttons a:eq(0)").removeAttr("style")        //displaying add button
-        $("#buttons a:eq(2)").removeAttr("style")        //displaying contribute button
-        $(this).text("Options")
-        chrome.extension.sendMessage({action: "getData", interval: parseInt(localStorage.interval)})
-    }
-}
+$("a[data-message='options']").click(function() {
+    $(".options").removeAttr("style");
+    $("a[data-message='addStock']").hide();
+    $("a[data-message='undoOptions']").show();
+    $(this).hide();
+});
+$("a[data-message='undoOptions']").click(function() {
+    $(".options").css("display", "none");
+    $("a[data-message='addStock']").show();
+    $("a[data-message='options']").show();
+    $(this).hide();
+});

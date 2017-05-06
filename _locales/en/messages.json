@@ -1,0 +1,86 @@
+{
+    "theTitle": {
+        "message": "Live quotes portfolio"
+    },
+
+    "options": {
+        "message": "Options"
+    },
+    "undoOptions": {
+        "message": "Cancel"
+    },
+
+    "marketOpens": {
+        "message": "Market opens from"
+    },
+    "marketCloses": {
+        "message": "to"
+    },
+    "marketHours": {
+        "message": "(0-24h)"
+    },
+    "updateEvery": {
+        "message": "Update every"
+    },
+    "seconds": {
+        "message": "seconds"
+    },
+
+    "addStock": {
+        "message": "Add quote"
+    },
+    "undoAddStock": {
+        "message": "Cancel"
+    },
+
+    "searchString": {
+        "message": "Symbol (find it on Google Finance,  eg. BIT:RACE)"
+    },
+    "symbolSearching": {
+        "message": "Searching symbol..."
+    },
+    "symbolNotFound": {
+        "message": "Symbol not found!"
+    },
+
+    "stockName": {
+        "message": "Name"
+    },
+    "stockValue": {
+        "message": "Val."
+    },
+    "stockVar": {
+        "message": "+/-"
+    },
+    "stockVarPerc": {
+        "message": "+/-&nbsp;%"
+    },
+    "stockTarget": {
+        "message": "Target"
+    },
+    "stockStoploss": {
+        "message": "StopLoss"
+    },
+    "stockQ": {
+        "message": "Qty"
+    },
+    "StockPrice": {
+        "message": "Price"
+    },
+    "StockInvestment": {
+        "message": "Invested"
+    },
+    "stockCurrent": {
+        "message": "Value"
+    },
+    "stockRoi": {
+        "message": "ROI"
+    },
+    "stockRoiPerc": {
+        "message": "ROI&nbsp;%"
+    },
+
+    "stocksTotal": {
+        "message": "Total"
+    }
+}

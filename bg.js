@@ -19,21 +19,24 @@ chrome.extension.onRequest.addListener(function (request) {
 
 function doStuff() {
    if (!stopUpdate()) {
+      chrome.browserAction.setIcon({path: {128: "icons/icon128.png"}});
       setTimeout(function () { checkTS("target"); checkTS("stoploss") }, 10)
       fetch()
-   }
+  } else {
+      chrome.browserAction.setIcon({path: {128: "icons/icon128_off.png"}});
+  }
 }
 
 function fetch() {
-   if (getValues(symbols).length === 0 && inputSyms.length === 0) { 
+   if (getValues(symbols).length === 0 && inputSyms.length === 0) {
       stockData = []
       chrome.extension.sendRequest({action: "updateView"})
-      return 
+      return
    }
 
    var syms = getValues(symbols).concat(inputSyms).sort()
    inputSyms = []
-   var url = "https://www.google.com/finance/info?client=ob&infotype=infoonebox&hl=en-IN&q=" + encodeURIComponent(syms.join(","))
+   var url = "https://www.google.com/finance/info?client=ob&infotype=infoonebox&hl=en&q=" + encodeURIComponent(syms.join(","))
    $.ajax({
       url: url,
       dataType: "text"
@@ -64,7 +67,7 @@ function checkTS(ToS) {
    ids.forEach(function (id, i) {
       if (eventNotified[ToS].indexOf(id) > -1) { return }
 
-      var trORsl = window[ToS][id] 
+      var trORsl = window[ToS][id]
       if (!trORsl) { return }
 
       var regex  = new RegExp('"' + id + '"[\\s\\S]+?"l":"(.*?)"', "i")
@@ -106,7 +109,7 @@ function notify(bodyStr, callback) {
 
 function stopUpdate() {
    var from = localStorage.from ? localStorage.from : 0
-   var to   = localStorage.to   ? localStorage.to    : 0
+   var to   = localStorage.to   ? localStorage.to   : 0
    var now  = new Date().toLocaleTimeString("en-US",{hour12:false})
        now  = now.length === 10 ? "0" + now : now
 
