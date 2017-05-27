@@ -94,9 +94,9 @@
                </thead>
 
                <tbody>
-                  <tr ng-repeat="ele in list | sortBy:sortKey:reverse:this track by ele.id" ng-attr-title="{{ele.name}}">
+                  <tr ng-repeat="ele in list | sortBy:sortKey:reverse:this track by ele.id">
                      <td>
-                        <span class="stockName">{{ele.name}}</span>
+                        <span class="stockName" ng-attr-title="{{ele.name}}">{{ele.name}}</span>
                         <a target="_blank" href="https://www.google.com/finance?q=BIT:{{ele.t | uppercase}}" title="See it on Google Finance">
                             Google
                         </a>
