@@ -1,6 +1,6 @@
 {
     "theTitle": {
-        "message": "Live quotes portfolio"
+        "message": "Live stocks portfolio"
     },
 
     "options": {
@@ -27,17 +27,24 @@
     },
 
     "addStock": {
-        "message": "Add quote"
+        "message": "Add stock"
     },
     "undoAddStock": {
         "message": "Cancel"
     },
 
+    "websites": {
+        "message": "Websites"
+    },
+    "undoWebsites": {
+        "message": "Cancel"
+    },
+
     "searchString": {
-        "message": "Symbol (find it on Google Finance,  eg. BIT:RACE)"
+        "message": "Stock name"
     },
     "symbolSearching": {
-        "message": "Searching symbol..."
+        "message": "Searching stock..."
     },
     "symbolNotFound": {
         "message": "Symbol not found!"

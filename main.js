@@ -1,6 +1,6 @@
 var bg  = chrome.extension.getBackgroundPage()
 //initialising app and attaching stuff
-angular.module("liveQuotesPortfolio", [])
+angular.module("liveStocksPortfolio", [])
     .filter("sortBy", sortBy)
     .controller("bodyCtrl",["$scope", "$window", bodyCtrl])
     .directive("colorUp", colorUp)
@@ -112,27 +112,6 @@ function bodyCtrl($scope, $window) {
         return total ? total: null
     }
 
-    function addSymbol($event) {
-        var howMany = $('tbody tr').length;
-        if ($event.keyCode !== 13) { return }
-        var syms = $scope.symbol.toUpperCase().replace(/ /g, "").split(",")
-        //emptying the input box
-        $scope.symbol = ""
-        syms = syms.filter(function (el, i) { return el.trim() !== "" && syms.indexOf(el) === i })
-        bg.inputSyms = bg.inputSyms.concat(syms)
-        chrome.extension.sendRequest({action: "getData", interval: 5});
-
-        $("#symbols").attr('placeholder', chrome.i18n.getMessage("symbolSearching"));
-        setTimeout(function() {
-            var howManyNew = $('tbody tr').length;
-            if (howManyNew === howMany) {
-                $("#symbols").attr('placeholder', chrome.i18n.getMessage("symbolNotFound"));
-            } else {
-                $("a[data-message='undoAddStock']").click();
-            }
-        }, 500);
-    }
-
     function delRow(ele) {
         $scope.list.splice($scope.list.indexOf(ele), 1)
         delete bg.symbols[ele.id]
@@ -169,6 +148,23 @@ function bodyCtrl($scope, $window) {
         localStorage.sortKey = $scope.sortKey
         localStorage.reverse = JSON.stringify($scope.reverse)
     }
+}
+
+function addSymbol(symbol) {
+    var howManyRows = $('tbody tr').length;
+    bg.inputSyms = bg.inputSyms.concat(symbol)
+    chrome.extension.sendRequest({action: "getData", interval: 5});
+
+    $("#symbols").attr('placeholder', chrome.i18n.getMessage("symbolSearching"));
+    setTimeout(function() {
+        $("#symbols").attr('placeholder', chrome.i18n.getMessage("searchString"));
+        var howManyNew = $('tbody tr').length;
+        if (howManyNew === howManyRows) {
+            $("#symbols").attr('placeholder', chrome.i18n.getMessage("symbolNotFound"));
+        } else {
+            $("a[data-message='undoAddStock']").click();
+        }
+    }, 500);
 }
 
 function sortBy() {
@@ -282,17 +278,40 @@ chrome.extension.onRequest.addListener(function (request) {
 function print() { console.log.apply(console, arguments) }
 function deComma(text) { return (text ? Number((text+"").replace(/,/g, "")) : "") }
 
+$("#symbols").keyup(function() {
+    var $this = $(this);
+    var value = $this.val();
+
+    var symbolsUrl = "https://www.google.com/finance/match?matchtype=matchall&ei=oJApWZnmBYeNUsSLnsgM&q=" + value;
+    $.getJSON(symbolsUrl, {
+        format: "json"
+    }).done(function(data) {
+        if (!jQuery.isEmptyObject(data)) {
+            $("#searchSymbols").remove();
+            $this.after('<div id="searchSymbols"></div>');
+            jQuery.each(data.matches, function(index, item) {
+                if (item.t !== '') {
+                    $("#searchSymbols").append("<a class='symbols' data-symbol='" + item.e + ":" + item.t +  "'>" + item.e + ":" + item.t + ": " + item.n +"</a>");
+                }
+            });
+        }
+    });
+});
+
 //something are done without angular and with normal jQuery and Javascript
 $("a[data-message='addStock']").click(function() {
-    $("#symbols").removeAttr("style");
+    $("#symbols").removeAttr("style").focus();
     $("a[data-message='undoAddStock']").show();
     $("a[data-message='options']").hide();
+    $("a[data-message='websites']").hide();
     $(this).hide();
 });
 $("a[data-message='undoAddStock']").click(function() {
-    $("#symbols").css("display", "none");
+    $("#symbols").val("").css("display", "none");
     $("a[data-message='addStock']").show();
     $("a[data-message='options']").show();
+    $("a[data-message='websites']").show();
+    $('#searchSymbols').remove();
     $(this).hide();
 });
 
@@ -300,11 +319,33 @@ $("a[data-message='options']").click(function() {
     $(".options").removeAttr("style");
     $("a[data-message='addStock']").hide();
     $("a[data-message='undoOptions']").show();
+    $("a[data-message='websites']").hide();
     $(this).hide();
 });
 $("a[data-message='undoOptions']").click(function() {
     $(".options").css("display", "none");
     $("a[data-message='addStock']").show();
     $("a[data-message='options']").show();
+    $("a[data-message='websites']").show();
     $(this).hide();
+});
+
+$("a[data-message='websites']").click(function() {
+    $(".websites").css("display", "block");
+    $("a[data-message='addStock']").hide();
+    $("a[data-message='options']").hide();
+    $("a[data-message='undoWebsites']").show();
+    $(this).hide();
+});
+$("a[data-message='undoWebsites']").click(function() {
+    $(".websites").css("display", "none");
+    $("a[data-message='addStock']").show();
+    $("a[data-message='options']").show();
+    $("a[data-message='websites']").show();
+    $(this).hide();
+});
+
+$("body").on("click", ".symbols", function() {
+    var symbol = $(this).attr('data-symbol');
+    addSymbol(symbol);
 });

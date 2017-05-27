@@ -1,6 +1,6 @@
 {
     "theTitle": {
-        "message": "Live quotes portfolio"
+        "message": "Live stocks portfolio"
     },
 
     "options": {
@@ -34,13 +34,20 @@
     },
 
     "searchString": {
-        "message": "Simbolo (cercalo su Google Finance, es BIT:RACE)"
+        "message": "Nome del titolo"
     },
     "symbolSearching": {
-        "message": "Sto cercando il simbolo inserito..."
+        "message": "Sto cercando il titolo inserito..."
     },
     "symbolNotFound": {
         "message": "Il simbolo inserito non è valido"
+    },
+
+    "websites": {
+        "message": "Websites"
+    },
+    "undoWebsites": {
+        "message": "Annulla"
     },
 
     "stockName": {

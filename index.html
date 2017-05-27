@@ -6,7 +6,7 @@
       <link rel="stylesheet" type="text/css" href="style.css">
    </head>
 
-   <body ng-app="liveQuotesPortfolio" ng-controller="bodyCtrl" ng-csp>
+   <body ng-app="liveStocksPortfolio" ng-controller="bodyCtrl" ng-csp>
       <div id="main">
          <a>
             <span data-message="theTitle">Live Stocks Portfolio</span>
@@ -16,7 +16,7 @@
 
             <div id="boxes">
                <!-- Symbol input box -->
-               <input id="symbols" type="text" data-placeholder="searchString" placeholder="Stock symbol (from Google Finance)" ng-model="symbol" ng-keypress="addSymbol($event)" style="display:none;">
+               <input id="symbols" type="text" data-placeholder="searchString" placeholder="Stock name" ng-model="symbol" style="display:none;">
                <!-- Time input Box -->
                <div class="options" style="display:none">
                   <span data-message="marketOpens">Market opens</span>
@@ -31,6 +31,10 @@
                   <input id="interval" type="Number" min="10" maxlength="4" ng-model="interval">
                   <span data-message="seconds">seconds</span>
                </div>
+               <div class="websites" style="display:none">
+                   <a target="_blank" href="https://it.investing.com/equities/">Investing.com</a>
+                   <a target="_blank" href="http://it.advfn.com/">AdvFN</a>
+               </div>
             </div>
 
             <div id="buttons">
@@ -39,6 +43,9 @@
 
                <a href="#" data-message="options">Options</a>
                <a href="#" data-message="undoOptions" style="display: none">Cancel</a>
+
+               <a href="#" data-message="websites">Sites</a>
+               <a href="#" data-message="undoWebsites" style="display: none">Cancel</a>
             </div>
          </div>
 
@@ -114,14 +121,7 @@
                </tbody>
 
                <tfoot>
-                  <td><span data-message="stocksTotal">Total</span></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                  <td colspan="8"><span data-message="stocksTotal">Total</span></td>
                   <td>{{tInvestment() | number:2}}</td>
                   <td>{{tValue() | number:2}}</td>
                   <td color-up>{{tROI() | number:2}}</td>
